@@ -1,70 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>🎉 Happy New Year 🎉</title>
-
-<style>
-body{
-    margin:0;
-    height:100vh;
-    background:linear-gradient(45deg,#ff0080,#7928ca);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:Arial;
-}
-.card{
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    text-align:center;
-}
-h1{color:#ff0080;}
-input{
-    padding:8px;
-    width:80%;
-    border-radius:10px;
-}
-button{
-    margin-top:10px;
-    padding:10px 20px;
-    border:none;
-    border-radius:10px;
-    background:#ff0080;
-    color:white;
-}
-</style>
-</head>
-
-<body onclick="playSong()">
-
-<audio id="song" src="newyear.mp3" loop></audio>
-
-<div class="card">
-    <h1>🎉 Happy New Year 🎉</h1>
-    <input id="name" placeholder="Apna naam likhiye">
-    <br><br>
-    <button onclick="showMsg()">Message Dekho</button>
-    <p id="msg"></p>
-</div>
-
-<script>
-let started=false;
-
-function playSong(){
-    if(!started){
-        document.getElementById("song").play();
-        started=true;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy New Year 🎉</title>
+  <style>
+    /* Reset & Body */
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body {
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, #ff9a9e, #fad0c4);
+      overflow: hidden;
+      color: white;
+      text-align: center;
+      transition: background 1s ease-in-out;
     }
-}
 
-function showMsg(){
-    let n=document.getElementById("name").value || "Dost";
-    document.getElementById("msg").innerHTML =
-    "✨ Happy New Year " + n + " ✨<br>Best wishes from <b>Mrityunjay</b>";
-}
-</script>
+    /* Firework Canvas */
+    canvas {
+      position: absolute;
+      top:0;
+      left:0;
+      width: 100%;
+      height: 100%;
+      z-index:0;
+    }
 
+    /* Content */
+    .container {
+      z-index: 1;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3rem;
+      text-shadow: 2px 2px 8px #000;
+      animation: glow 1.5s ease-in-out infinite alternate;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    /* Button */
+    button {
+      padding: 15px 35px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background: #ffd700;
+      color: #000;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    /* Glow Animation */
+    @keyframes glow {
+      from {text-shadow: 0 0 10px #fff;}
+      to {text-shadow: 0 0 25px #ffd700, 0 0 35px #ff0000;}
+    }
+  </style>
+</head>
+<body>
+  <canvas id="fireworks"></canvas>
+
+  <div class="container">
+    <h1>🎉 Happy New Year 2026 🎉</h1>
+    <h2>Mrityunjay ke taraf se</h2>
+    <p>Tap button to play music 🎵</p>
+    <button onclick="playSong()">▶ Play Song</button>
+
+    <audio id="song">
+      <source src="ReelAudio-68063.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <script>
+    // Play Song
+    function playSong() {
+      document.getElementById("song").play();
+    }
+
+    // Fireworks
+    const canvas = document.getElementById("fireworks");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+      constructor(x, y, color){
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.size = Math.random() * 3 + 2;
+        this.speedX = (Math.random() - 0.5) * 6;
+        this.speedY = (Math.random() - 0.5) * 6;
+        this.alpha = 1;
+      }
+      update(){
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha -= 0.02;
+      }
+      draw(){
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    let particles = [];
+    function createFirework(){
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height / 2;
+      const colors = ['#ff0043','#14fc56','#00ffff','#fffa00','#ff00ff'];
+      for(let i=0;i<50;i++){
+        particles.push(new Particle(x,y, colors[Math.floor(Math.random()*colors.length)]));
+      }
+    }
+
+    function animate(){
+      ctx.fillStyle = "rgba(0,0,0,0.1)";
+      ctx.fillRect(0,0,canvas.width, canvas.height);
+      for(let i = particles.length-1; i>=0; i--){
+        particles[i].update();
+        particles[i].draw();
+        if(particles[i].alpha <= 0){
+          particles.splice(i,1);
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    setInterval(createFirework, 800);
+    animate();
+
+    window.addEventListener('resize', ()=>{
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 </body>
 </html>
