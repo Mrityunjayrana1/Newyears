@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🎉 Happy New Year 🎉</title>
+
+<style>
+body{
+    margin:0;
+    height:100vh;
+    background:linear-gradient(45deg,#ff0080,#7928ca);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial;
+}
+.card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    text-align:center;
+}
+h1{color:#ff0080;}
+input{
+    padding:8px;
+    width:80%;
+    border-radius:10px;
+}
+button{
+    margin-top:10px;
+    padding:10px 20px;
+    border:none;
+    border-radius:10px;
+    background:#ff0080;
+    color:white;
+}
+</style>
+</head>
+
+<body onclick="playSong()">
+
+<audio id="song" src="newyear.mp3" loop></audio>
+
+<div class="card">
+    <h1>🎉 Happy New Year 🎉</h1>
+    <input id="name" placeholder="Apna naam likhiye">
+    <br><br>
+    <button onclick="showMsg()">Message Dekho</button>
+    <p id="msg"></p>
+</div>
+
+<script>
+let started=false;
+
+function playSong(){
+    if(!started){
+        document.getElementById("song").play();
+        started=true;
+    }
+}
+
+function showMsg(){
+    let n=document.getElementById("name").value || "Dost";
+    document.getElementById("msg").innerHTML =
+    "✨ Happy New Year " + n + " ✨<br>Best wishes from <b>Mrityunjay</b>";
+}
+</script>
+
+</body>
+</html>
